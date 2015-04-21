@@ -1,0 +1,498 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Whitman En Masse</title>
+		<style>
+			html, body {
+				height: 100%;
+			}
+
+			body {
+				background-color: #000000;
+				margin: 0;
+				font-family: Arial;
+				overflow: hidden;
+			}
+
+			a {
+				color: #ffffff;
+			}
+
+			#info {
+				position: absolute;
+				width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			#menu {
+				position: absolute;
+				bottom: 20px;
+				width: 100%;
+				text-align: center;
+			}
+
+			.blue {
+			    background-color : rgba(0,127,127,0.7); 
+				box-shadow: 0px 0px 20px rgba(0,255,255,0.5);
+				border: 1px solid rgba(127,255,255,0.25);
+			}
+
+			.blue:hover {
+				box-shadow: 0px 0px 20px rgba(0,255,255,0.75);
+				border: 1px solid rgba(127,255,255,0.75);
+			}
+
+			.frame {
+				width: 1000px;
+				height: 600px;
+				cursor: default;
+			    background-color : rgba(0,127,127,0.9); 
+				box-shadow: 0px 0px 20px rgba(0,255,255,0.5);
+				border: 1px solid rgba(127,255,255,0.25);
+				overflow: auto;
+			}
+
+			.framechapter {
+				position: absolute;
+				top: 10px;
+				font-size: 30px;
+				text-align: center;
+				width : 100%;
+				clear : both;
+				color: rgba(255,255,255,0.95);
+				-webkit-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-moz-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-o-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-ms-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+			}
+
+			.frametext {
+				position: absolute;
+				top: 90px;
+				left: 20px;
+				font-size: 25px;
+				clear : both;
+				color: rgba(255,255,255,0.95);
+				-webkit-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-moz-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-o-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-ms-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+			}
+
+			.image {
+				clear:both;
+			}
+
+			.framex {
+				position: absolute;
+				float:right;
+				font-size: 30px;
+				color: rgba(255,255,255,0.95);
+				-webkit-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-moz-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-o-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-ms-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+			}
+
+			.element {
+				width: 120px;
+				height: 120px;
+			}
+
+			.textbox {
+				box-shadow: 0px 0px 20px rgba(0,255,255,0.5);
+				border: 1px solid rgba(127,255,255,0.25);
+				cursor: default;
+			    background-color : #007F7F; 
+			    color: rgba(255,255,255,0.95);
+			}
+
+			.details {
+				position: absolute;
+				display: inline-block;
+				top: 10px;
+				/*width: 100%;*/
+				font-size: 18px;
+				text-align: center;
+				color: rgba(255,255,255,0.95);
+				-webkit-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-moz-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-o-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				-ms-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+				filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+			}
+
+
+			button {
+				color: rgba(127,255,255,0.75);
+				background: transparent;
+				outline: 1px solid rgba(127,255,255,0.75);
+				border: 0px;
+				padding: 5px 10px;
+				cursor: pointer;
+			}
+			button:hover {
+				background-color: rgba(0,255,255,0.5);
+			}
+			button:active {
+				color: #000000;
+				background-color: rgba(0,255,255,0.75);
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-86951-7']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+		  })();
+		</script>
+		<script src="jquery-1.11.2.min.js"></script>
+		<script src="leaves2.js"></script>
+		<script src="leaveswords.js"></script>
+		<script src="three.min.js"></script>
+		<script src="tween.min.js"></script>
+		<script src="TrackballControls.js"></script>
+		<script src="CSS3DRenderer.js"></script>
+		<script src="chroma.js"></script>
+
+		<div id="container"></div>
+		<div id="menu">
+
+		<button id="sphere"  style="display: none;">SPHERE</button>
+		<input type="text" class="textbox" size="20" maxlength="20" id="textbox"><input type="submit" value="^" class="textbox" onclick="find()"><input type="submit" value="X" class="textbox" onclick="reset()"><input type="submit" value="?" class="textbox" onclick="findxyz()"><input type="submit" value="Reset" class="textbox" onclick="changexyz()">
+		<script>
+			var searchmode = 0;
+			var searchstr = "";
+			var FOCUS=1400;
+			var camera, scene, renderer;
+			var geometry, material, mesh;
+			var MAINFRAME, MAINFRAMEobj;
+			var controls;
+			var objects = [];
+			var targets = { table: [], sphere: [], helix: [], grid: [] };
+			var curmode;
+			init();
+			animate();
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 5000 );
+				camera.position.z = FOCUS;
+
+				scene = new THREE.Scene();
+
+				for(i=0; i<text.poem.length; i++) {
+					
+					var element = document.createElement( 'div' );
+					element.className = 'element blue';
+					element.id = i;
+
+					var details = document.createElement( 'span' );
+					details.id = 'span'+i;
+					details.className = 'details';
+					details.innerHTML = $.trim(text.poem[i].chapter);
+					element.appendChild( details );
+
+					var object = new THREE.CSS3DObject( element );
+					object.position.x = Math.random() * 4000 - 2000;
+					object.position.y = Math.random() * 4000 - 2000;
+					object.position.z = Math.random() * 4000 - 2000;
+					scene.add( object );
+					objects.push( object );
+
+					element.parent = object;
+					object.element.onclick = function() { focusIdClick(this.id); };
+
+				}
+
+				// sphere
+
+				var vector = new THREE.Vector3();
+
+				for ( var i = 0, l = objects.length; i < l; i ++ ) {
+
+					var object = objects[ i ];
+
+					var phi = Math.acos( -1 + ( 2 * i ) / l );
+					var theta = Math.sqrt( l * Math.PI ) * phi;
+
+					var object = new THREE.Object3D();
+
+					object.position.x = 1000 * Math.cos( theta ) * Math.sin( phi );
+					object.position.y = 1000 * Math.sin( theta ) * Math.sin( phi );
+					object.position.z = 1000 * Math.cos( phi );
+
+					vector.copy( object.position ).multiplyScalar( 2 );
+
+					object.lookAt( vector );
+
+					targets.sphere.push( object );
+
+				}
+
+				//
+
+				renderer = new THREE.CSS3DRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.domElement.style.position = 'absolute';
+				renderer.domElement.style.top = 0;
+				document.getElementById( 'container' ).appendChild( renderer.domElement );
+
+				//
+
+				controls = new THREE.TrackballControls( camera, renderer.domElement );
+				controls.rotateSpeed = 0.5;
+				controls.addEventListener( 'change', render );
+
+				var button = document.getElementById( 'sphere' );
+				button.addEventListener( 'click', function ( event ) {
+
+					transform( targets.sphere, 2000 );
+
+				}, false );
+
+				transform( targets.sphere, 2000 );
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function transform( targets, duration ) {
+
+				TWEEN.removeAll();
+
+				for ( var i = 0; i < objects.length; i ++ ) {
+
+					var object = objects[ i ];
+					var target = targets[ i ];
+
+					new TWEEN.Tween( object.position )
+						.to( { x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration )
+						.easing( TWEEN.Easing.Exponential.InOut )
+						.start();
+
+					new TWEEN.Tween( object.rotation )
+						.to( { x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration )
+						.easing( TWEEN.Easing.Exponential.InOut )
+						.start();
+
+				}
+
+				new TWEEN.Tween( this )
+					.to( {}, duration * 2 )
+					.onUpdate( render )
+					.start();
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				TWEEN.update();
+				controls.update();
+
+			}
+
+			function render() {
+
+				renderer.render( scene, camera );
+
+			}
+
+			function reset() {
+				var i=0;
+				while(i<text.poem.length)
+				{
+					$('#'+i).css('background-color', 'rgba(0,127,127,0.7)');
+					$('#'+i).css('box-shadow', '0px 0px 20px rgba(0,255,255,0.5)');
+					$('#'+i).css('border', '1px solid rgba(127,255,255,0.25)');
+					i++;
+				}
+				document.getElementById('textbox').value="";
+				searchmode = 0;
+				searchstr = "";
+			}
+
+			function find() {
+				//resetcolor();
+				searchmode = 1;
+				var str = document.getElementById('textbox').value;
+				searchstr = str;
+				var i=0;
+				var num_total = words[str];
+				var max=0;
+				var maxid=-1;
+				while(i<text.poem.length)
+				{
+					temp = text.poem[i].text.toLowerCase();
+					chapter = text.poem[i].chapter.toLowerCase();
+					str = str.toLowerCase();
+					var count = occurrences(temp,str,false) + occurrences(chapter,str,false);
+					if(count > 0)
+					{
+						$('#'+i).css('background-color', chroma.interpolate('rgba(0,127,0,0.7)', 'rgba(127,0,0,0.7)', count*5/num_total).css());
+						$('#'+i).css('box-shadow', '0px 0px 20px ' + chroma.interpolate('rgba(0,255,0,0.5)', 'rgba(255,0,0,0.5)', count*5/num_total).css());
+						$('#'+i).css('border', '1px solid ' + chroma.interpolate('rgba(127,255,127,0.25)', 'rgba(255,127,127,0.25)', count*5/num_total).css());
+					}
+					else
+					{
+						$('#'+i).css('background-color', 'rgba(0,127,127,0.7)');
+						$('#'+i).css('box-shadow', '0px 0px 20px rgba(0,255,255,0.5)');
+						$('#'+i).css('border', '1px solid rgba(127,255,255,0.25)');
+					}
+					if(max<count)
+					{
+						max=count;
+						maxid=i;
+					}
+					i++;
+				}
+				if(maxid != -1)
+					focusId(maxid);
+				else
+					alert("Not Found!");
+			}
+
+			function occurrences(string, subString, allowOverlapping){
+			    string+=""; subString+="";
+			    if(subString.length<=0) return string.length+1;
+
+			    var n=0, pos=0;
+			    var step=(allowOverlapping)?(1):(subString.length);
+
+			    while(true){
+			        pos=string.indexOf(subString,pos);
+			        if(pos>=0){ n++; pos+=step; } else break;
+			    }
+			    return(n);
+			}
+
+			function focusId(idnum) {
+				var position = objects[idnum];
+				var target = targets.sphere[idnum];
+				var tempz;
+				var vector = new THREE.Vector3(target.position.x,target.position.y,target.position.z);
+				vector.normalize();
+				vector.multiplyScalar(FOCUS);
+				new TWEEN.Tween( camera.position )
+					.to( { x: vector.x, y: vector.y, z: vector.z }, 2000 )
+					.easing( TWEEN.Easing.Sinusoidal.Out )
+					.start();
+			}
+
+			function focusIdClick(idnum) {
+				var position = objects[idnum];
+				var target = targets.sphere[idnum];
+				var tempz;
+				var vector = new THREE.Vector3(target.position.x,target.position.y,target.position.z);
+				vector.normalize();
+				vector.multiplyScalar(FOCUS);
+				new TWEEN.Tween( camera.position )
+					.to( { x: vector.x, y: vector.y, z: vector.z }, 1000 )
+					.easing( TWEEN.Easing.Sinusoidal.Out )
+					.start()
+					.onComplete(function(){
+
+					new TWEEN.Tween( camera.position )
+						.to( { x: vector.x * 1.2, y: vector.y * 1.2, z: vector.z * 1.2 }, 1000 )
+						.easing( TWEEN.Easing.Sinusoidal.Out )
+						.start()
+						.onComplete(function(){
+							// controls.enabled=false;
+							var id = idnum;
+							MAINFRAME = document.createElement( 'div' );
+							MAINFRAME.className = 'frame';
+							MAINFRAME.id = 'frame';
+
+							var frame = document.createElement( 'span' );
+							frame.className = 'framechapter';
+							var str1 = text.poem[id].chapter.split('\n').join('<br/>');
+							if(searchmode)
+								str1 = str1.replace(new RegExp(searchstr, "ig"),'<span style="color:red">$&</span>');
+							frame.innerHTML = str1;
+							MAINFRAME.appendChild( frame );
+
+							var frame1 = document.createElement( 'span' );
+							frame1.className = 'frametext';
+							var str1 = text.poem[id].text.replace(new RegExp('( |\-)\u00a0', "g"),'<br>');
+							if(searchmode)
+								str1 = str1.replace(new RegExp(searchstr, "ig"),'<span style="color:red">$&</span>');
+							for(var i=0;i<hapax.length;i++)
+								str1 = str1.replace(new RegExp('\\b'+hapax[i]+'\\b', "ig"),'<span style="color:yellow">$&</span>');
+							frame1.innerHTML = str1;
+							MAINFRAME.appendChild( frame1 );
+
+							// var image = document.createElement( 'img' );
+							// image.className = 'image';
+							// image.src = 'http://www.whitmanarchive.org/published/LG/figures/ppp.01663.015.jpg';
+							// MAINFRAME.appendChild( image );
+
+							var vector1 = new THREE.Vector3();
+							MAINFRAMEobj = new THREE.CSS3DObject( MAINFRAME );
+							MAINFRAMEobj.name = 'frame';
+							MAINFRAMEobj.position.x = target.position.x*1.1;
+							MAINFRAMEobj.position.y = target.position.y*1.1;
+							MAINFRAMEobj.position.z = target.position.z*1.1;
+							vector1.copy( MAINFRAMEobj.position ).multiplyScalar( 2 );
+							MAINFRAMEobj.lookAt( vector1 );
+							scene.add( MAINFRAMEobj );
+						});
+					});
+			}
+
+
+			function findxyz()
+			{
+				focusId(30);
+			}
+
+			function changexyz()
+			{
+				new TWEEN.Tween( camera.position )
+					.to( { x: 0, y: 0, z: 1400 }, 2000 )
+					.easing( TWEEN.Easing.Sinusoidal.Out )
+					.start();
+			}
+			
+			var i=0;
+			while(i<text.poem.length)
+			{
+				var span = $('#span'+i);
+			    var fontSize = parseInt(span.css('font-size'));
+			    do {
+			        fontSize--;
+			        span.css('font-size', fontSize.toString() + 'px');
+			    } while (span.height() >= 120 || span.width() >= 127);
+				i++;
+			}
+
+
+
+		</script>
+	</body>
+</html>
