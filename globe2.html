@@ -207,7 +207,7 @@
 					var details = document.createElement( 'span' );
 					details.id = 'span'+i;
 					details.className = 'details';
-					details.innerHTML = $.trim(text.poem[i].chapter)+i;
+					details.innerHTML = $.trim(text.poem[i].chapter);
 					element.appendChild( details );
 
 					var object = new THREE.CSS3DObject( element );
