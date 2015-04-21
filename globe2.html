@@ -175,7 +175,6 @@
 		<div id="container"></div>
 		<div id="menu">
 
-		<button id="sphere"  style="display: none;">SPHERE</button>
 		<input type="text" class="textbox" size="20" maxlength="20" id="textbox"><input type="submit" value="^" class="textbox" onclick="find()"><input type="submit" value="X" class="textbox" onclick="reset()"><input type="submit" value="?" class="textbox" onclick="findxyz()"><input type="submit" value="Reset" class="textbox" onclick="changexyz()">
 		<script>
 			var searchmode = 0;
@@ -186,7 +185,9 @@
 			var MAINFRAME, MAINFRAMEobj;
 			var controls;
 			var objects = [];
-			var targets = { table: [], sphere: [], helix: [], grid: [] };
+			var targets = { sphere: []};
+			var priority= [];
+			var rank=[];
 			var curmode;
 			init();
 			animate();
@@ -206,7 +207,7 @@
 					var details = document.createElement( 'span' );
 					details.id = 'span'+i;
 					details.className = 'details';
-					details.innerHTML = $.trim(text.poem[i].chapter);
+					details.innerHTML = $.trim(text.poem[i].chapter)+i;
 					element.appendChild( details );
 
 					var object = new THREE.CSS3DObject( element );
@@ -218,18 +219,37 @@
 
 					element.parent = object;
 					object.element.onclick = function() { focusIdClick(this.id); };
-
+					priority.push({id:i,count:0});
+					rank[i]=i;
 				}
 
-				// sphere
+				createSphere();
+
+				renderer = new THREE.CSS3DRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.domElement.style.position = 'absolute';
+				renderer.domElement.style.top = 0;
+				document.getElementById( 'container' ).appendChild( renderer.domElement );
+
+				//
+
+				controls = new THREE.TrackballControls( camera, renderer.domElement );
+				controls.rotateSpeed = 0.5;
+				controls.addEventListener( 'change', render );
+
+				transform( targets.sphere, 2000 );
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function createSphere () {
 
 				var vector = new THREE.Vector3();
+				targets.sphere = [];
 
 				for ( var i = 0, l = objects.length; i < l; i ++ ) {
-
-					var object = objects[ i ];
-
-					var phi = Math.acos( -1 + ( 2 * i ) / l );
+					//var phi = Math.acos( -1 + ( 2 * priority[i].id ) / l );
+					var phi = Math.acos( -1 + ( 2 * rank[i] ) / l );
 					var theta = Math.sqrt( l * Math.PI ) * phi;
 
 					var object = new THREE.Object3D();
@@ -245,30 +265,6 @@
 					targets.sphere.push( object );
 
 				}
-
-				//
-
-				renderer = new THREE.CSS3DRenderer();
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				renderer.domElement.style.position = 'absolute';
-				renderer.domElement.style.top = 0;
-				document.getElementById( 'container' ).appendChild( renderer.domElement );
-
-				//
-
-				controls = new THREE.TrackballControls( camera, renderer.domElement );
-				controls.rotateSpeed = 0.5;
-				controls.addEventListener( 'change', render );
-
-				var button = document.getElementById( 'sphere' );
-				button.addEventListener( 'click', function ( event ) {
-
-					transform( targets.sphere, 2000 );
-
-				}, false );
-
-				transform( targets.sphere, 2000 );
-				window.addEventListener( 'resize', onWindowResize, false );
 
 			}
 
@@ -339,14 +335,12 @@
 			}
 
 			function find() {
-				//resetcolor();
 				searchmode = 1;
 				var str = document.getElementById('textbox').value;
 				searchstr = str;
 				var i=0;
 				var num_total = words[str];
-				var max=0;
-				var maxid=-1;
+				priority=[];
 				while(i<text.poem.length)
 				{
 					temp = text.poem[i].text.toLowerCase();
@@ -365,17 +359,20 @@
 						$('#'+i).css('box-shadow', '0px 0px 20px rgba(0,255,255,0.5)');
 						$('#'+i).css('border', '1px solid rgba(127,255,255,0.25)');
 					}
-					if(max<count)
-					{
-						max=count;
-						maxid=i;
-					}
+					priority.push({id:i,count:count});
 					i++;
 				}
-				if(maxid != -1)
-					focusId(maxid);
-				else
-					alert("Not Found!");
+				priority.sort(function(a,b) { return parseFloat(a.count) - parseFloat(b.count) })
+				i=0;
+				while(i<priority.length)
+				{
+					rank[priority[i].id]=i;
+					i++;
+				}
+				//alert(JSON.stringify(priority, null, 4));
+				createSphere();
+				transform( targets.sphere, 2000 );
+				focusId(priority[priority.length-1].id);
 			}
 
 			function occurrences(string, subString, allowOverlapping){
@@ -473,10 +470,7 @@
 
 			function changexyz()
 			{
-				new TWEEN.Tween( camera.position )
-					.to( { x: 0, y: 0, z: 1400 }, 2000 )
-					.easing( TWEEN.Easing.Sinusoidal.Out )
-					.start();
+				location.reload();
 			}
 			
 			var i=0;
