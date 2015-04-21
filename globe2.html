@@ -163,14 +163,14 @@
 		    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
 		  })();
 		</script>
-		<script src="jquery-1.11.2.min.js"></script>
-		<script src="leaves2.js"></script>
-		<script src="leaveswords.js"></script>
-		<script src="three.min.js"></script>
-		<script src="tween.min.js"></script>
-		<script src="TrackballControls.js"></script>
-		<script src="CSS3DRenderer.js"></script>
-		<script src="chroma.js"></script>
+		<script src="scripts/jquery-1.11.2.min.js"></script>
+		<script src="scripts/leaves2.js"></script>
+		<script src="scripts/leaveswords.js"></script>
+		<script src="scripts/three.min.js"></script>
+		<script src="scripts/tween.min.js"></script>
+		<script src="scripts/TrackballControls.js"></script>
+		<script src="scripts/CSS3DRenderer.js"></script>
+		<script src="scripts/chroma.js"></script>
 
 		<div id="container"></div>
 		<div id="menu">
@@ -452,9 +452,12 @@
 							var vector1 = new THREE.Vector3();
 							MAINFRAMEobj = new THREE.CSS3DObject( MAINFRAME );
 							MAINFRAMEobj.name = 'frame';
-							MAINFRAMEobj.position.x = target.position.x*1.1;
-							MAINFRAMEobj.position.y = target.position.y*1.1;
-							MAINFRAMEobj.position.z = target.position.z*1.1;
+							// MAINFRAMEobj.position.x = target.position.x*1.1;
+							// MAINFRAMEobj.position.y = target.position.y*1.1;
+							// MAINFRAMEobj.position.z = target.position.z*1.1;
+							MAINFRAMEobj.position.x = camera.position.x*0.7;
+							MAINFRAMEobj.position.y = camera.position.y*0.7;
+							MAINFRAMEobj.position.z = camera.position.z*0.7;
 							vector1.copy( MAINFRAMEobj.position ).multiplyScalar( 2 );
 							MAINFRAMEobj.lookAt( vector1 );
 							scene.add( MAINFRAMEobj );
