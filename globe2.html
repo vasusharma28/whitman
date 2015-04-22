@@ -209,6 +209,7 @@
 			var rank=[];
 			var curmode;
 			var hapaxONOFF=0;
+			var isHelpOn=0;
 			init();
 			animate();
 			keyboardInit();
@@ -506,6 +507,66 @@
 						// image.src = 'http://www.whitmanarchive.org/published/LG/figures/ppp.01663.015.jpg';
 						// MAINFRAME.appendChild( image );
 
+						var MAINobj = new THREE.CSS3DObject( MAINFRAME );
+						MAINobj.name = 'frame';
+						MAINobj.position.x = camera.position.x*0.7;
+						MAINobj.position.y = camera.position.y*0.7;
+						MAINobj.position.z = camera.position.z*0.7;
+						MAINobj.lookAt( camera.position );
+						scene.add( MAINobj );
+						MAINFRAMEobj.push(MAINobj);
+					});
+				});
+			}
+
+			function help()
+			{
+				if(!isHelpOn)
+				{
+					isHelpOn = 1;
+					new TWEEN.Tween( camera.position )
+					.to( { x: camera.position.x * 1.7, y: camera.position.y * 1.7, z: camera.position.z * 1.7 }, 1000 )
+					.easing( TWEEN.Easing.Sinusoidal.Out )
+					.start()
+					.onComplete(function(){
+						MAINFRAME = document.createElement( 'div' );
+						MAINFRAME.className = 'frame';
+						MAINFRAME.id = 'frame';
+
+						var frame = document.createElement( 'span' );
+						frame.className = 'framechapter';
+						var str1 = "ABOUT WHITMAN EN MASSE";
+						frame.innerHTML = str1;
+						MAINFRAME.appendChild( frame );
+
+						var frame1 = document.createElement( 'span' );
+						frame1.className = 'frametext';
+						var str1 = "\
+						[^]  : Search <br/> \
+						[hapax]  : Toggle hapax logomena highlights <br/> \
+						[lock] : Unlock/Lock camera & mouse (Lock helps scrolling on text using mouse scroll)<br/> \
+						[x] : Closes all open frames <br/> \
+						[reset] : Resets frames, colors and searches<br/><br/>\
+						Esc Key : Closes all open frames<br/>\
+						Enter Key : Searches when cursor is on search box<br/> \
+						Mouse Scroll : Zooms in/out<br/> \
+						Mouse Drag Left Click : Rotates sphere<br/>\
+						Mouse Drag Right Click : Shifts camera position<br/>\
+						Mouse Hover on Tiles : Displays chapter name<br/><br/>\
+						<b>Whitman En Masse v1.0</b><br/><br/>\
+						Application concept & design by Spencer Chalifour, Victor Florence, Vasu Sharma, Chiranjib Sur, Juliet Vishwanathan<br/>\
+						Data analysis & application programming by Vasu Sharma, Chiranjib Sur, Juliet Vishwanathan<br/>\
+						Documentation by Spencer Chalifour, Victor Florence<br/>\
+						Special thanks to Alin Dobra, Terry Harpold<br/><br/>\
+						Full text of the 1881–82 edition of Walt Whitman’s Leaves of Grass (the “Osgood edition”) is from <a href='http://www.whitmanarchive.org'>The Walt Whitman \
+						Archive</a>, eds. Ed Folsum and Kenneth M. Price. Whitman’s text is herein redistributed \
+						for noncommercial research purposes under the terms of a Creative Commons license (CC BY-NC-SA 3.0), and may be \
+						further redistributed <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>under the terms of that license</a>.<br/>\
+						<br/> Whitman en masse uses the <a href='http://www.threejs.org'>Three.js</a> API\
+						";
+						frame1.innerHTML = str1;
+						MAINFRAME.appendChild( frame1 );
+
 						var vector1 = new THREE.Vector3();
 						var MAINobj = new THREE.CSS3DObject( MAINFRAME );
 						MAINobj.name = 'frame';
@@ -517,65 +578,12 @@
 						scene.add( MAINobj );
 						MAINFRAMEobj.push(MAINobj);
 					});
-				});
-			}
-
-			function help()
-			{
-				new TWEEN.Tween( camera.position )
-				.to( { x: camera.position.x * 1.7, y: camera.position.y * 1.7, z: camera.position.z * 1.7 }, 1000 )
-				.easing( TWEEN.Easing.Sinusoidal.Out )
-				.start()
-				.onComplete(function(){
-					MAINFRAME = document.createElement( 'div' );
-					MAINFRAME.className = 'frame';
-					MAINFRAME.id = 'frame';
-
-					var frame = document.createElement( 'span' );
-					frame.className = 'framechapter';
-					var str1 = "ABOUT WHITMAN EN MASSE";
-					frame.innerHTML = str1;
-					MAINFRAME.appendChild( frame );
-
-					var frame1 = document.createElement( 'span' );
-					frame1.className = 'frametext';
-					var str1 = "\
-					[^]  : Search <br/> \
-					[hapax]  : Toggle hapax logomena highlights <br/> \
-					[lock] : Unlock/Lock camera & mouse (Lock helps scrolling on text using mouse scroll)<br/> \
-					[x] : Closes all open frames <br/> \
-					[reset] : Resets frames, colors and searches<br/><br/>\
-					Esc Key : Closes all open frames<br/>\
-					Enter Key : Searches when cursor is on search box<br/> \
-					Mouse Scroll : Zooms in/out<br/> \
-					Mouse Drag Left Click : Rotates sphere<br/>\
-					Mouse Drag Right Click : Shifts camera position<br/>\
-					Mouse Hover on Tiles : Displays chapter name<br/><br/>\
-					<b>Whitman En Masse v1.0</b><br/><br/>\
-					Application concept & design by Spencer Chalifour, Victor Florence, Vasu Sharma, Chiranjib Sur, Juliet Vishwanathan<br/>\
-					Data analysis & application programming by Vasu Sharma, Chiranjib Sur, Juliet Vishwanathan<br/>\
-					Documentation by Spencer Chalifour, Victor Florence<br/>\
-					Special thanks to Alin Dobra, Terry Harpold<br/><br/>\
-					Full text of the 1881–82 edition of Walt Whitman’s Leaves of Grass (the “Osgood edition”) is from The Walt Whitman \
-					Archive (http://www.whitmanarchive.org), eds. Ed Folsum and Kenneth M. Price. Whitman’s text is herein redistributed \
-					for noncommercial research purposes under the terms of a Creative Commons license (CC BY-NC-SA 3.0), and may be \
-					further redistributed <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>under the terms of that license</a>.<br/>\
-					<br/> Whitman en masse uses the <a href='http://www.threejs.org'>Three.js</a> API\
-					";
-					frame1.innerHTML = str1;
-					MAINFRAME.appendChild( frame1 );
-
-					var vector1 = new THREE.Vector3();
-					var MAINobj = new THREE.CSS3DObject( MAINFRAME );
-					MAINobj.name = 'frame';
-					MAINobj.position.x = camera.position.x*0.7;
-					MAINobj.position.y = camera.position.y*0.7;
-					MAINobj.position.z = camera.position.z*0.7;
-					vector1.copy( MAINobj.position ).multiplyScalar( 2 );
-					MAINobj.lookAt( vector1 );
-					scene.add( MAINobj );
-					MAINFRAMEobj.push(MAINobj);
-				});
+				}
+				else
+				{
+					isHelpOn=0;
+					escapekey();
+				}
 			}
 
 			function hapax()
@@ -584,12 +592,12 @@
 				{
 					hapaxONOFF=0;
 					$( "#hapaxtoggle" ).removeClass( "yellow" );
-					$( "#hapaxtoggle" ).addClass( "blue" );
+					$( "#hapaxtoggle" ).addClass( "blue1" );
 				}
 				else
 				{
 					hapaxONOFF=1;
-					$( "#hapaxtoggle" ).removeClass( "blue" );
+					$( "#hapaxtoggle" ).removeClass( "blue1" );
 					$( "#hapaxtoggle" ).addClass( "yellow" );
 				}
 			}
