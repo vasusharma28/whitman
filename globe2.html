@@ -257,6 +257,7 @@
 
 				controls = new THREE.TrackballControls( camera, renderer.domElement );
 				controls.rotateSpeed = 0.5;
+				controls.zoomSpeed = 0.5;
 				controls.addEventListener( 'change', render );
 
 				transform( targets.sphere, 2000 );
@@ -464,7 +465,7 @@
 				var vector = new THREE.Vector3(target.position.x,target.position.y,target.position.z);
 				vector.normalize();
 				vector.multiplyScalar(FOCUS);
-				new TWEEN.Tween( camera.position )
+				new TWEEN.Tween( cameralock.position )
 				.to( { x: vector.x, y: vector.y, z: vector.z }, 1000 )
 				.easing( TWEEN.Easing.Sinusoidal.Out )
 				.start()
