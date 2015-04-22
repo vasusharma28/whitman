@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Whitman En Masse</title>
+	</head>
+	<body>
+		<div id="menu">
+			<input type="text" class="textbox blue1" id="textbox" autocomplete="off" onkeydown="if (event.keyCode == 13) { find(); return false; }" placeholder="Search" style="width:100px; height:20px; padding:0px 5px;">
+			<input type="image" class="textbox blue1" onclick="find()" src="images/search.png" value="asd">
+			<input type="image" class="textbox blue1" src="images/hapax.png" onclick="hapax()" id="hapaxtoggle">
+			<input type="image" class="textbox blue1" src="images/open.png" id="cameralock" onclick="cameralockcheck()">
+			<input type="image" class="textbox blue1" src="images/window.png" onclick="escapekey()">
+			<input type="image" class="textbox blue1" src="images/refresh.png" onclick="reset()">
+			<input type="image" class="textbox blue1" src="images/help.png" onclick="help()">
+		</div>
+	</body>
+</html>

@@ -39,6 +39,18 @@
 				text-align: center;
 			}
 
+			.blue1 {
+			    background-color : rgba(0,127,127,0.7); 
+				box-shadow: 0px 0px 20px rgba(0,255,255,0.5);
+				border: 1px solid rgba(127,255,255,0.75);
+			}
+
+			.blue1:hover {
+			    background-color : rgba(0,127,127,0.7); 
+				box-shadow: 0px 0px 20px rgba(0,255,255,0.75);
+				border: 1px solid rgba(127,255,255,0.75);
+			}
+
 			.blue {
 			    background-color : rgba(0,127,127,0.7); 
 				box-shadow: 0px 0px 20px rgba(0,255,255,0.5);
@@ -46,6 +58,7 @@
 			}
 
 			.blue:hover {
+			    background-color : rgba(0,127,127,0.7); 
 				box-shadow: 0px 0px 20px rgba(0,255,255,0.75);
 				border: 1px solid rgba(127,255,255,0.75);
 			}
@@ -53,10 +66,11 @@
 			.yellow {
 			    background-color : rgba(127,127,0,0.7); 
 				box-shadow: 0px 0px 20px rgba(255,255,0,0.5);
-				border: 1px solid rgba(255,255,127,0.25);
+				border: 1px solid rgba(255,255,127,0.75);
 			}
 
 			.yellow:hover {
+			    background-color : rgba(127,127,0,0.7); 
 				box-shadow: 0px 0px 20px rgba(255,255,0,0.75);
 				border: 1px solid rgba(255,255,127,0.75);
 			}
@@ -124,7 +138,8 @@
 			.textbox {
 				cursor: default;
 			    color: rgba(255,255,255,0.95);
-			    height:20px;
+			    height: 20px;
+			    vertical-align: bottom;
 			}
 
 			.details {
@@ -161,17 +176,6 @@
 		</style>
 	</head>
 	<body>
-		<script type="text/javascript">
-		  var _gaq = _gaq || [];
-		  _gaq.push(['_setAccount', 'UA-86951-7']);
-		  _gaq.push(['_trackPageview']);
-
-		  (function() {
-		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
-		  })();
-		</script>
 		<script src="scripts/jquery-1.11.2.min.js"></script>
 		<script src="scripts/leaves2.js"></script>
 		<script src="scripts/leaveswords.js"></script>
@@ -183,8 +187,14 @@
 
 		<div id="container"></div>
 		<div id="menu">
-		<form action="javascript:find()" autocomplete="off">
-		<input type="text" class="textbox blue" id="textbox"><input type="image" src="images/search1.png" alt="Submit" class="textbox blue"><input type="button" value="X" class="textbox blue" onclick="reset()"><input type="button" value="?" class="textbox blue" onclick="findxyz()"><input type="button" value="Reset" class="textbox blue" onclick="changexyz()"><input type="button" value="Hapax" class="textbox blue" onclick="hapax()" id="hapaxtoggle"></form>
+			<input type="text" class="textbox blue1" id="textbox" autocomplete="off" onkeydown="if (event.keyCode == 13) { find(); return false; }" placeholder="Search" style="width:100px; height:20px; padding:0px 5px;" title="Search Box">
+			<input type="image" class="textbox blue1" onclick="find()" src="images/search.png" title="Search">
+			<input type="image" class="textbox blue1" src="images/hapax.png" onclick="hapax()" id="hapaxtoggle" title="Hapax Toggle">
+			<input type="image" class="textbox blue1" src="images/open.png" id="cameralock" onclick="cameralockcheck()" title="Camera/Mouse Lock">
+			<input type="image" class="textbox blue1" src="images/window.png" onclick="escapekey()" title="Frame Close">
+			<input type="image" class="textbox blue1" src="images/refresh.png" onclick="reset()" title="Reset">
+			<input type="image" class="textbox blue1" src="images/help.png" onclick="help()" title="Help">
+		</div>
 		<script>
 			var searchmode = 0;
 			var searchstr = "";
@@ -220,6 +230,7 @@
 					details.className = 'details';
 					details.innerHTML = $.trim(text.poem[i].chapter);
 					element.appendChild( details );
+					element.title=$.trim(text.poem[i].chapter);
 
 					var object = new THREE.CSS3DObject( element );
 					object.position.x = Math.random() * 4000 - 2000;
@@ -253,13 +264,19 @@
 
 			}
 
+			function resetrank()
+			{
+				for(i=0; i<text.poem.length; i++) {
+					rank[i]=i;
+				}
+			}
+
 			function createSphere () {
 
 				var vector = new THREE.Vector3();
 				targets.sphere = [];
 
 				for ( var i = 0, l = objects.length; i < l; i ++ ) {
-					//var phi = Math.acos( -1 + ( 2 * priority[i].id ) / l );
 					var phi = Math.acos( -1 + ( 2 * rank[i] ) / l );
 					var theta = Math.sqrt( l * Math.PI ) * phi;
 
@@ -343,11 +360,17 @@
 				document.getElementById('textbox').value="";
 				searchmode = 0;
 				searchstr = "";
+				resetrank();
+				createSphere();
+				transform( targets.sphere, 2000 );
+				escapekey();
 			}
 
 			function find() {
-				searchmode = 1;
 				var str = document.getElementById('textbox').value;
+				if(str=='')
+					return;
+				searchmode = 1;
 				searchstr = str;
 				var i=0;
 				var num_total=0;
@@ -399,7 +422,6 @@
 					rank[priority[i].id]=i;
 					i++;
 				}
-				//alert(JSON.stringify(priority, null, 4));
 				if(found>0)
 				{
 					createSphere();
@@ -443,97 +465,47 @@
 				vector.normalize();
 				vector.multiplyScalar(FOCUS);
 				new TWEEN.Tween( camera.position )
-					.to( { x: vector.x, y: vector.y, z: vector.z }, 1000 )
-					.easing( TWEEN.Easing.Sinusoidal.Out )
-					.start()
-					.onComplete(function(){
+				.to( { x: vector.x, y: vector.y, z: vector.z }, 1000 )
+				.easing( TWEEN.Easing.Sinusoidal.Out )
+				.start()
+				.onComplete(function(){
 
 					new TWEEN.Tween( camera.position )
-						.to( { x: vector.x * 1.7, y: vector.y * 1.7, z: vector.z * 1.7 }, 1000 )
-						.easing( TWEEN.Easing.Sinusoidal.Out )
-						.start()
-						.onComplete(function(){
-							// controls.enabled=false;
-							var id = idnum;
-							MAINFRAME = document.createElement( 'div' );
-							MAINFRAME.className = 'frame';
-							MAINFRAME.id = 'frame';
-
-							var frame = document.createElement( 'span' );
-							frame.className = 'framechapter';
-							var str1 = text.poem[id].chapter.split('\n').join('<br/>');
-							if(searchmode)
-								str1 = str1.replace(new RegExp(searchstr, "ig"),'<span style="color:red">$&</span>');
-							frame.innerHTML = str1;
-							MAINFRAME.appendChild( frame );
-
-							var frame1 = document.createElement( 'span' );
-							frame1.className = 'frametext';
-							var str1 = text.poem[id].text.replace(new RegExp('( |\-)\u00a0', "g"),'<br>');
-							if(searchmode)
-								str1 = str1.replace(new RegExp(searchstr, "ig"),'<span style="color:red">$&</span>');
-							if(hapaxONOFF==1)
-								for(var i=0;i<hapaxwords.length;i++)
-									str1 = str1.replace(new RegExp('\\b'+hapaxwords[i]+'\\b', "ig"),'<span style="color:yellow">$&</span>');
-							frame1.innerHTML = str1;
-							MAINFRAME.appendChild( frame1 );
-
-							// var image = document.createElement( 'img' );
-							// image.className = 'image';
-							// image.src = 'http://www.whitmanarchive.org/published/LG/figures/ppp.01663.015.jpg';
-							// MAINFRAME.appendChild( image );
-
-							var vector1 = new THREE.Vector3();
-							// if (typeof MAINFRAMEobj == 'undefined') {
-							// 	MAINFRAMEobj = new THREE.CSS3DObject( MAINFRAME );
-							// }
-							// else {
-							// 	MAINFRAMEobj.element = MAINFRAME;
-							// }
-
-							var MAINobj = new THREE.CSS3DObject( MAINFRAME );
-							MAINobj.name = 'frame';
-							MAINobj.position.x = camera.position.x*0.7;
-							MAINobj.position.y = camera.position.y*0.7;
-							MAINobj.position.z = camera.position.z*0.7;
-							vector1.copy( MAINobj.position ).multiplyScalar( 2 );
-							MAINobj.lookAt( vector1 );
-							scene.add( MAINobj );
-							MAINFRAMEobj.push(MAINobj);
-						});
-					});
-			}
-
-			function findxyz()
-			{
-				new TWEEN.Tween( camera.position )
-					.to( { x: camera.position.x * 1.7, y: camera.position.y * 1.7, z: camera.position.z * 1.7 }, 1000 )
+					.to( { x: vector.x * 1.7, y: vector.y * 1.7, z: vector.z * 1.7 }, 1000 )
 					.easing( TWEEN.Easing.Sinusoidal.Out )
 					.start()
 					.onComplete(function(){
+						// controls.enabled=false;
+						var id = idnum;
 						MAINFRAME = document.createElement( 'div' );
 						MAINFRAME.className = 'frame';
 						MAINFRAME.id = 'frame';
 
 						var frame = document.createElement( 'span' );
 						frame.className = 'framechapter';
-						var str1 = "HELP";
+						var str1 = text.poem[id].chapter.split('\n').join('<br/>');
+						if(searchmode)
+							str1 = str1.replace(new RegExp(searchstr, "ig"),'<span style="color:red">$&</span>');
 						frame.innerHTML = str1;
 						MAINFRAME.appendChild( frame );
 
 						var frame1 = document.createElement( 'span' );
 						frame1.className = 'frametext';
-						var str1 = "Hello";
+						var str1 = text.poem[id].text.replace(new RegExp('( |\-)\u00a0', "g"),'<br>');
+						if(searchmode)
+							str1 = str1.replace(new RegExp(searchstr, "ig"),'<span style="color:red">$&</span>');
+						if(hapaxONOFF==1)
+							for(var i=0;i<hapaxwords.length;i++)
+								str1 = str1.replace(new RegExp('\\b'+hapaxwords[i]+'\\b', "ig"),'<span style="color:yellow">$&</span>');
 						frame1.innerHTML = str1;
 						MAINFRAME.appendChild( frame1 );
 
+						// var image = document.createElement( 'img' );
+						// image.className = 'image';
+						// image.src = 'http://www.whitmanarchive.org/published/LG/figures/ppp.01663.015.jpg';
+						// MAINFRAME.appendChild( image );
+
 						var vector1 = new THREE.Vector3();
-						// if (typeof MAINFRAMEobj == 'undefined') {
-						// 	MAINFRAMEobj = new THREE.CSS3DObject( MAINFRAME );
-						// }
-						// else {
-						// 	MAINFRAMEobj.element = MAINFRAME;
-						// }
 						var MAINobj = new THREE.CSS3DObject( MAINFRAME );
 						MAINobj.name = 'frame';
 						MAINobj.position.x = camera.position.x*0.7;
@@ -544,11 +516,43 @@
 						scene.add( MAINobj );
 						MAINFRAMEobj.push(MAINobj);
 					});
+				});
 			}
 
-			function changexyz()
+			function help()
 			{
-				location.reload();
+				new TWEEN.Tween( camera.position )
+				.to( { x: camera.position.x * 1.7, y: camera.position.y * 1.7, z: camera.position.z * 1.7 }, 1000 )
+				.easing( TWEEN.Easing.Sinusoidal.Out )
+				.start()
+				.onComplete(function(){
+					MAINFRAME = document.createElement( 'div' );
+					MAINFRAME.className = 'frame';
+					MAINFRAME.id = 'frame';
+
+					var frame = document.createElement( 'span' );
+					frame.className = 'framechapter';
+					var str1 = "LEGEND";
+					frame.innerHTML = str1;
+					MAINFRAME.appendChild( frame );
+
+					var frame1 = document.createElement( 'span' );
+					frame1.className = 'frametext';
+					var str1 = "<img src='images/search.png' width='30px' height='30px'/>  : Search <br/> <img src='images/hapax.png' width='30px' height='30px'/>  : Toggle Hapax Logomenon Highlights <br/> <img src='images/open.png' width='30px' height='30px'/>  <img src='images/close.png' width='30px' height='30px'/>: Unlock/Lock Camera & Mouse (Helps scrolling on text using mouse scroll)<br/> <img src='images/window.png' width='30px' height='30px'/> : Closes all open frames <br/> <img src='images/refresh.png' width='30px' height='30px'/> : Resets Frames, Colors and Searches<br/><br/> Esc Key : Closes all open frames<br/>Enter Key : Searches when Cursor is on Search Box<br/> Mouse Scroll : Zooms In/Out<br/> Mouse Drag : Rotates Sphere<br/>Mouse Hover on Tiles: Displays Chapter Name<br/><br/>Credits : Whitman En Masse<br/><br/>Chiranjib Sur<br/>Juliet Vishwanathan<br/>Spencer Chalifour<br/>Vasu Sharma<br/>Victor Florence";
+					frame1.innerHTML = str1;
+					MAINFRAME.appendChild( frame1 );
+
+					var vector1 = new THREE.Vector3();
+					var MAINobj = new THREE.CSS3DObject( MAINFRAME );
+					MAINobj.name = 'frame';
+					MAINobj.position.x = camera.position.x*0.7;
+					MAINobj.position.y = camera.position.y*0.7;
+					MAINobj.position.z = camera.position.z*0.7;
+					vector1.copy( MAINobj.position ).multiplyScalar( 2 );
+					MAINobj.lookAt( vector1 );
+					scene.add( MAINobj );
+					MAINFRAMEobj.push(MAINobj);
+				});
 			}
 
 			function hapax()
@@ -595,9 +599,9 @@
 		    }
 		}
 
-		function keydown(e) 
+		function escapekey()
 		{
-			if(e.keyCode==27 && MAINFRAMEobj.length>0)
+			if(MAINFRAMEobj.length>0)
 			{
 				for(var i=0; i<MAINFRAMEobj.length; i++)
 				{
@@ -612,10 +616,34 @@
 				.to( { x: camera.position.x*0.6, y: camera.position.y *0.6, z: camera.position.z * 0.6 }, 1000 )
 				.easing( TWEEN.Easing.Sinusoidal.Out )
 				.start();
-
 			}
 		}
 
+		function keydown(e) 
+		{
+			if(e.keyCode==27)
+			{
+				escapekey();
+			}
+		}
+
+		function cameralockcheck()
+		{
+			if(controls.enabled)
+			{
+				controls.enabled=false;
+				$( "#cameralock" ).removeClass( "blue1" );
+				$( "#cameralock" ).addClass( "yellow" );
+				$( "#cameralock" ).attr("src", 'images/close.png');
+			}
+			else
+			{
+				controls.enabled=true;
+				$( "#cameralock" ).removeClass( "yellow" );
+				$( "#cameralock" ).addClass( "blue1" );
+				$( "#cameralock" ).attr("src", 'images/open.png');
+			}
+		}
 		</script>
 	</body>
 </html>
