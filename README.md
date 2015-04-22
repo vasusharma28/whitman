@@ -1,2 +1,0 @@
-# whitman
-whitman en masse
