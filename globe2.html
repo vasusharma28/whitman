@@ -50,6 +50,17 @@
 				border: 1px solid rgba(127,255,255,0.75);
 			}
 
+			.red {
+			    background-color : rgba(127,0,0,0.7); 
+				box-shadow: 0px 0px 20px rgba(255,0,0,0.5);
+				border: 1px solid rgba(255,127,127,0.25);
+			}
+
+			.red:hover {
+				box-shadow: 0px 0px 20px rgba(255,0,0,0.75);
+				border: 1px solid rgba(255,127,127,0.75);
+			}
+
 			.frame {
 				width: 1000px;
 				height: 600px;
@@ -116,6 +127,7 @@
 				cursor: default;
 			    background-color : #007F7F; 
 			    color: rgba(255,255,255,0.95);
+			    height:20px;
 			}
 
 			.details {
@@ -174,8 +186,9 @@
 
 		<div id="container"></div>
 		<div id="menu">
-
-		<input type="text" class="textbox" size="20" maxlength="20" id="textbox"><input type="submit" value="^" class="textbox" onclick="find()"><input type="submit" value="X" class="textbox" onclick="reset()"><input type="submit" value="?" class="textbox" onclick="findxyz()"><input type="submit" value="Reset" class="textbox" onclick="changexyz()">
+		<form action="javascript:find()" autocomplete="off">
+		<input type="text" class="textbox" id="textbox"><input type="image" src="images/search1.png" alt="Submit" class="textbox" />
+		<input type="button" value="X" class="textbox" onclick="reset()"><input type="button" value="?" class="textbox" onclick="findxyz()"><input type="button" value="Reset" class="textbox" onclick="changexyz()"></form>
 		<script>
 			var searchmode = 0;
 			var searchstr = "";
@@ -339,8 +352,26 @@
 				var str = document.getElementById('textbox').value;
 				searchstr = str;
 				var i=0;
-				var num_total = words[str];
+				var num_total=0;
+				if(str in words)
+				{
+					num_total = words[str];
+				}
+				else
+				{
+					while(i<text.poem.length)
+					{
+						temp = text.poem[i].text.toLowerCase();
+						chapter = text.poem[i].chapter.toLowerCase();
+						str = str.toLowerCase();
+						num_total += occurrences(temp,str,false) + occurrences(chapter,str,false);
+						i++;
+					}
+
+				}
 				priority=[];
+				var found=0;
+				i=0;
 				while(i<text.poem.length)
 				{
 					temp = text.poem[i].text.toLowerCase();
@@ -349,6 +380,7 @@
 					var count = occurrences(temp,str,false) + occurrences(chapter,str,false);
 					if(count > 0)
 					{
+						found++;
 						$('#'+i).css('background-color', chroma.interpolate('rgba(0,127,0,0.7)', 'rgba(127,0,0,0.7)', count*5/num_total).css());
 						$('#'+i).css('box-shadow', '0px 0px 20px ' + chroma.interpolate('rgba(0,255,0,0.5)', 'rgba(255,0,0,0.5)', count*5/num_total).css());
 						$('#'+i).css('border', '1px solid ' + chroma.interpolate('rgba(127,255,127,0.25)', 'rgba(255,127,127,0.25)', count*5/num_total).css());
@@ -370,9 +402,12 @@
 					i++;
 				}
 				//alert(JSON.stringify(priority, null, 4));
-				createSphere();
-				transform( targets.sphere, 2000 );
-				focusId(priority[priority.length-1].id);
+				if(found>0)
+				{
+					createSphere();
+					transform( targets.sphere, 2000 );
+					focusId(priority[priority.length-1].id);
+				}
 			}
 
 			function occurrences(string, subString, allowOverlapping){
@@ -416,7 +451,7 @@
 					.onComplete(function(){
 
 					new TWEEN.Tween( camera.position )
-						.to( { x: vector.x * 1.2, y: vector.y * 1.2, z: vector.z * 1.2 }, 1000 )
+						.to( { x: vector.x * 1.7, y: vector.y * 1.7, z: vector.z * 1.7 }, 1000 )
 						.easing( TWEEN.Easing.Sinusoidal.Out )
 						.start()
 						.onComplete(function(){
@@ -450,6 +485,12 @@
 							// MAINFRAME.appendChild( image );
 
 							var vector1 = new THREE.Vector3();
+							// if (typeof MAINFRAMEobj == 'undefined') {
+							// 	MAINFRAMEobj = new THREE.CSS3DObject( MAINFRAME );
+							// }
+							// else {
+							// 	MAINFRAMEobj.element = MAINFRAME;
+							// }
 							MAINFRAMEobj = new THREE.CSS3DObject( MAINFRAME );
 							MAINFRAMEobj.name = 'frame';
 							// MAINFRAMEobj.position.x = target.position.x*1.1;
@@ -465,10 +506,12 @@
 					});
 			}
 
-
 			function findxyz()
 			{
-				focusId(30);
+				if (typeof MAINFRAMEobj !== 'undefined') {
+
+				}
+				renderer.render( scene, camera );
 			}
 
 			function changexyz()
