@@ -191,7 +191,7 @@
 			<input type="button" class="textbox blue1" onclick="find()" title="Search" value="^">
 			<input type="button" class="textbox blue1" onclick="hapax()" id="hapaxtoggle" title="Hapax Toggle" value="hapax">
 			<input type="button" class="textbox blue1" id="cameralock" onclick="cameralockcheck()" title="Camera/Mouse Lock" value="lock">
-			<input type="button" class="textbox blue1" onclick="escapekey()" title="Frame Close" value="X">
+			<input type="button" class="textbox blue1" onclick="escapekey()" title="Frame Close" value="x">
 			<input type="button" class="textbox blue1" onclick="reset()" title="Reset" value="reset">
 			<input type="button" class="textbox blue1" onclick="help()" title="Help" value="?">
 		</div>
@@ -533,7 +533,7 @@
 
 					var frame = document.createElement( 'span' );
 					frame.className = 'framechapter';
-					var str1 = "LEGEND";
+					var str1 = "ABOUT WHITMAN EN MASSE";
 					frame.innerHTML = str1;
 					MAINFRAME.appendChild( frame );
 
@@ -541,17 +541,17 @@
 					frame1.className = 'frametext';
 					var str1 = "\
 					[^]  : Search <br/> \
-					[hapax]  : Toggle Hapax Logomenon Highlights <br/> \
-					[lock] : Unlock/Lock Camera & Mouse (Helps scrolling on text using mouse scroll)<br/> \
-					[X] : Closes all open frames <br/> \
-					[reset] : Resets Frames, Colors and Searches<br/>\
+					[hapax]  : Toggle hapax logomena highlights <br/> \
+					[lock] : Unlock/Lock camera & mouse (Lock helps scrolling on text using mouse scroll)<br/> \
+					[x] : Closes all open frames <br/> \
+					[reset] : Resets frames, colors and searches<br/><br/>\
 					Esc Key : Closes all open frames<br/>\
-					Enter Key : Searches when Cursor is on Search Box<br/> \
-					Mouse Scroll : Zooms In/Out<br/> \
-					Mouse Drag Left Click : Rotates Sphere<br/>\
-					Mouse Drag Right Click : Shifts Camera Position<br/>\
-					Mouse Hover on Tiles : Displays Chapter Name<br/><br/>\
-					<b>Whitman En Masse</b><br/><br/>\
+					Enter Key : Searches when cursor is on search box<br/> \
+					Mouse Scroll : Zooms in/out<br/> \
+					Mouse Drag Left Click : Rotates sphere<br/>\
+					Mouse Drag Right Click : Shifts camera position<br/>\
+					Mouse Hover on Tiles : Displays chapter name<br/><br/>\
+					<b>Whitman En Masse v1.0</b><br/><br/>\
 					Application concept & design by Spencer Chalifour, Victor Florence, Vasu Sharma, Chiranjib Sur, Juliet Vishwanathan<br/>\
 					Data analysis & application programming by Vasu Sharma, Chiranjib Sur, Juliet Vishwanathan<br/>\
 					Documentation by Spencer Chalifour, Victor Florence<br/>\
@@ -560,7 +560,7 @@
 					Archive (http://www.whitmanarchive.org), eds. Ed Folsum and Kenneth M. Price. Whitman’s text is herein redistributed \
 					for noncommercial research purposes under the terms of a Creative Commons license (CC BY-NC-SA 3.0), and may be \
 					further redistributed <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>under the terms of that license</a>.<br/>\
-					<br/> API- <a href='threejs.org'>three.js</a> \
+					<br/> Whitman en masse uses the <a href='http://www.threejs.org'>Three.js</a> API\
 					";
 					frame1.innerHTML = str1;
 					MAINFRAME.appendChild( frame1 );
