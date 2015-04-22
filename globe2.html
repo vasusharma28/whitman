@@ -50,15 +50,15 @@
 				border: 1px solid rgba(127,255,255,0.75);
 			}
 
-			.red {
-			    background-color : rgba(127,0,0,0.7); 
-				box-shadow: 0px 0px 20px rgba(255,0,0,0.5);
-				border: 1px solid rgba(255,127,127,0.25);
+			.yellow {
+			    background-color : rgba(127,127,0,0.7); 
+				box-shadow: 0px 0px 20px rgba(255,255,0,0.5);
+				border: 1px solid rgba(255,255,127,0.25);
 			}
 
-			.red:hover {
-				box-shadow: 0px 0px 20px rgba(255,0,0,0.75);
-				border: 1px solid rgba(255,127,127,0.75);
+			.yellow:hover {
+				box-shadow: 0px 0px 20px rgba(255,255,0,0.75);
+				border: 1px solid rgba(255,255,127,0.75);
 			}
 
 			.frame {
@@ -122,10 +122,7 @@
 			}
 
 			.textbox {
-				box-shadow: 0px 0px 20px rgba(0,255,255,0.5);
-				border: 1px solid rgba(127,255,255,0.25);
 				cursor: default;
-			    background-color : #007F7F; 
 			    color: rgba(255,255,255,0.95);
 			    height:20px;
 			}
@@ -187,23 +184,24 @@
 		<div id="container"></div>
 		<div id="menu">
 		<form action="javascript:find()" autocomplete="off">
-		<input type="text" class="textbox" id="textbox"><input type="image" src="images/search1.png" alt="Submit" class="textbox" />
-		<input type="button" value="X" class="textbox" onclick="reset()"><input type="button" value="?" class="textbox" onclick="findxyz()"><input type="button" value="Reset" class="textbox" onclick="changexyz()"></form>
+		<input type="text" class="textbox blue" id="textbox"><input type="image" src="images/search1.png" alt="Submit" class="textbox blue"><input type="button" value="X" class="textbox blue" onclick="reset()"><input type="button" value="?" class="textbox blue" onclick="findxyz()"><input type="button" value="Reset" class="textbox blue" onclick="changexyz()"><input type="button" value="Hapax" class="textbox blue" onclick="hapax()" id="hapaxtoggle"></form>
 		<script>
 			var searchmode = 0;
 			var searchstr = "";
 			var FOCUS=1400;
 			var camera, scene, renderer;
 			var geometry, material, mesh;
-			var MAINFRAME, MAINFRAMEobj;
+			var MAINFRAME, MAINFRAMEobj=[];
 			var controls;
 			var objects = [];
 			var targets = { sphere: []};
 			var priority= [];
 			var rank=[];
 			var curmode;
+			var hapaxONOFF=0;
 			init();
 			animate();
+			keyboardInit();
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 5000 );
@@ -474,8 +472,9 @@
 							var str1 = text.poem[id].text.replace(new RegExp('( |\-)\u00a0', "g"),'<br>');
 							if(searchmode)
 								str1 = str1.replace(new RegExp(searchstr, "ig"),'<span style="color:red">$&</span>');
-							for(var i=0;i<hapax.length;i++)
-								str1 = str1.replace(new RegExp('\\b'+hapax[i]+'\\b', "ig"),'<span style="color:yellow">$&</span>');
+							if(hapaxONOFF==1)
+								for(var i=0;i<hapaxwords.length;i++)
+									str1 = str1.replace(new RegExp('\\b'+hapaxwords[i]+'\\b', "ig"),'<span style="color:yellow">$&</span>');
 							frame1.innerHTML = str1;
 							MAINFRAME.appendChild( frame1 );
 
@@ -491,32 +490,81 @@
 							// else {
 							// 	MAINFRAMEobj.element = MAINFRAME;
 							// }
-							MAINFRAMEobj = new THREE.CSS3DObject( MAINFRAME );
-							MAINFRAMEobj.name = 'frame';
-							// MAINFRAMEobj.position.x = target.position.x*1.1;
-							// MAINFRAMEobj.position.y = target.position.y*1.1;
-							// MAINFRAMEobj.position.z = target.position.z*1.1;
-							MAINFRAMEobj.position.x = camera.position.x*0.7;
-							MAINFRAMEobj.position.y = camera.position.y*0.7;
-							MAINFRAMEobj.position.z = camera.position.z*0.7;
-							vector1.copy( MAINFRAMEobj.position ).multiplyScalar( 2 );
-							MAINFRAMEobj.lookAt( vector1 );
-							scene.add( MAINFRAMEobj );
+
+							var MAINobj = new THREE.CSS3DObject( MAINFRAME );
+							MAINobj.name = 'frame';
+							MAINobj.position.x = camera.position.x*0.7;
+							MAINobj.position.y = camera.position.y*0.7;
+							MAINobj.position.z = camera.position.z*0.7;
+							vector1.copy( MAINobj.position ).multiplyScalar( 2 );
+							MAINobj.lookAt( vector1 );
+							scene.add( MAINobj );
+							MAINFRAMEobj.push(MAINobj);
 						});
 					});
 			}
 
 			function findxyz()
 			{
-				if (typeof MAINFRAMEobj !== 'undefined') {
+				new TWEEN.Tween( camera.position )
+					.to( { x: camera.position.x * 1.7, y: camera.position.y * 1.7, z: camera.position.z * 1.7 }, 1000 )
+					.easing( TWEEN.Easing.Sinusoidal.Out )
+					.start()
+					.onComplete(function(){
+						MAINFRAME = document.createElement( 'div' );
+						MAINFRAME.className = 'frame';
+						MAINFRAME.id = 'frame';
 
-				}
-				renderer.render( scene, camera );
+						var frame = document.createElement( 'span' );
+						frame.className = 'framechapter';
+						var str1 = "HELP";
+						frame.innerHTML = str1;
+						MAINFRAME.appendChild( frame );
+
+						var frame1 = document.createElement( 'span' );
+						frame1.className = 'frametext';
+						var str1 = "Hello";
+						frame1.innerHTML = str1;
+						MAINFRAME.appendChild( frame1 );
+
+						var vector1 = new THREE.Vector3();
+						// if (typeof MAINFRAMEobj == 'undefined') {
+						// 	MAINFRAMEobj = new THREE.CSS3DObject( MAINFRAME );
+						// }
+						// else {
+						// 	MAINFRAMEobj.element = MAINFRAME;
+						// }
+						var MAINobj = new THREE.CSS3DObject( MAINFRAME );
+						MAINobj.name = 'frame';
+						MAINobj.position.x = camera.position.x*0.7;
+						MAINobj.position.y = camera.position.y*0.7;
+						MAINobj.position.z = camera.position.z*0.7;
+						vector1.copy( MAINobj.position ).multiplyScalar( 2 );
+						MAINobj.lookAt( vector1 );
+						scene.add( MAINobj );
+						MAINFRAMEobj.push(MAINobj);
+					});
 			}
 
 			function changexyz()
 			{
 				location.reload();
+			}
+
+			function hapax()
+			{
+				if(hapaxONOFF==1)
+				{
+					hapaxONOFF=0;
+					$( "#hapaxtoggle" ).removeClass( "yellow" );
+					$( "#hapaxtoggle" ).addClass( "blue" );
+				}
+				else
+				{
+					hapaxONOFF=1;
+					$( "#hapaxtoggle" ).removeClass( "blue" );
+					$( "#hapaxtoggle" ).addClass( "yellow" );
+				}
 			}
 			
 			var i=0;
@@ -531,7 +579,42 @@
 				i++;
 			}
 
+		function keyboardInit() 
+		{
+		    if (document.addEventListener)
+		    {
+		       document.addEventListener("keydown",keydown,false);
+		    }
+		    else if (document.attachEvent)
+		    {
+		       document.attachEvent("onkeydown", keydown);
+		    }
+		    else
+		    {
+		       document.onkeydown= keydown;
+		    }
+		}
 
+		function keydown(e) 
+		{
+			if(e.keyCode==27 && MAINFRAMEobj.length>0)
+			{
+				for(var i=0; i<MAINFRAMEobj.length; i++)
+				{
+					MAINFRAMEobj[i].position.x=10000;
+					MAINFRAMEobj[i].position.y=10000;
+					MAINFRAMEobj[i].position.z=10000;
+				}
+				MAINFRAMEobj=[];
+				render();
+
+				new TWEEN.Tween( camera.position )
+				.to( { x: camera.position.x*0.6, y: camera.position.y *0.6, z: camera.position.z * 0.6 }, 1000 )
+				.easing( TWEEN.Easing.Sinusoidal.Out )
+				.start();
+
+			}
+		}
 
 		</script>
 	</body>
