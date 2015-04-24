@@ -404,15 +404,6 @@
 					if(count > 0)
 					{
 						found++;
-						$('#'+i).css('background-color', chroma.interpolate('rgba(0,127,0,0.7)', 'rgba(127,0,0,0.7)', count*5/num_total).css());
-						$('#'+i).css('box-shadow', '0px 0px 20px ' + chroma.interpolate('rgba(0,255,0,0.5)', 'rgba(255,0,0,0.5)', count*5/num_total).css());
-						$('#'+i).css('border', '1px solid ' + chroma.interpolate('rgba(127,255,127,0.25)', 'rgba(255,127,127,0.25)', count*5/num_total).css());
-					}
-					else
-					{
-						$('#'+i).css('background-color', 'rgba(0,127,127,0.7)');
-						$('#'+i).css('box-shadow', '0px 0px 20px rgba(0,255,255,0.5)');
-						$('#'+i).css('border', '1px solid rgba(127,255,255,0.25)');
 					}
 					priority.push({id:i,count:count});
 					i++;
@@ -422,6 +413,20 @@
 				while(i<priority.length)
 				{
 					rank[priority[i].id]=i;
+					if(priority[i].count>0)
+					{
+						var color = (i-priority.length+found)/found;
+						//var color = i;
+						$('#'+priority[i].id).css('background-color', chroma.interpolate('rgba(0,127,0,0.7)', 'rgba(127,0,0,0.7)',color ).css());
+						$('#'+priority[i].id).css('box-shadow', '0px 0px 20px ' + chroma.interpolate('rgba(0,255,0,0.5)', 'rgba(255,0,0,0.5)', color).css());
+						$('#'+priority[i].id).css('border', '1px solid ' + chroma.interpolate('rgba(127,255,127,0.25)', 'rgba(255,127,127,0.25)', color).css());
+					}
+					else
+					{
+						$('#'+priority[i].id).css('background-color', 'rgba(0,127,127,0.7)');
+						$('#'+priority[i].id).css('box-shadow', '0px 0px 20px rgba(0,255,255,0.5)');
+						$('#'+priority[i].id).css('border', '1px solid rgba(127,255,255,0.25)');
+					}
 					i++;
 				}
 				if(found>0)
