@@ -186,6 +186,7 @@
 		<script src="scripts/chroma.js"></script>
 
 		<div id="container"></div>
+		<!-- Menu items -->
 		<div id="menu">
 			<input type="text" class="textbox blue1" id="textbox" autocomplete="off" onkeydown="if (event.keyCode == 13) { find(); return false; }" placeholder="Search" style="width:100px; padding:0px 5px; height:18px" title="Search Box">
 			<input type="button" class="textbox blue1" onclick="find()" title="Search" value="^">
@@ -214,53 +215,51 @@
 			animate();
 			keyboardInit();
 			function init() {
-
+				// Camera Initialization
 				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 5000 );
 				camera.position.z = FOCUS;
-
+				// Scene Initialization
 				scene = new THREE.Scene();
 
 				for(i=0; i<text.poem.length; i++) {
-					
+					// Element Creation
 					var element = document.createElement( 'div' );
 					element.className = 'element blue';
 					element.id = i;
-
 					var details = document.createElement( 'span' );
 					details.id = 'span'+i;
 					details.className = 'details';
 					details.innerHTML = $.trim(text.poem[i].chapter);
 					element.appendChild( details );
 					element.title=$.trim(text.poem[i].chapter);
-
+					// Convertion of element to CSS3DObject
 					var object = new THREE.CSS3DObject( element );
 					object.position.x = Math.random() * 4000 - 2000;
 					object.position.y = Math.random() * 4000 - 2000;
 					object.position.z = Math.random() * 4000 - 2000;
+					// Pushing to the scene
 					scene.add( object );
 					objects.push( object );
-
 					element.parent = object;
 					object.element.onclick = function() { focusIdClick(this.id); };
 					priority.push({id:i,count:0});
 					rank[i]=i;
 				}
-
+				// Function to create/update sphere
 				createSphere();
-
+				// Renders the container element to add the scene on the page
 				renderer = new THREE.CSS3DRenderer();
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.domElement.style.position = 'absolute';
 				renderer.domElement.style.top = 0;
 				document.getElementById( 'container' ).appendChild( renderer.domElement );
 
-				//
-
+				// Trackball Controls
 				controls = new THREE.TrackballControls( camera, renderer.domElement );
 				controls.rotateSpeed = 0.5;
 				controls.zoomSpeed = 0.5;
 				controls.addEventListener( 'change', render );
-
+				// Transformation to sphere
 				transform( targets.sphere, 2000 );
 				window.addEventListener( 'resize', onWindowResize, false );
 
@@ -459,9 +458,9 @@
 				vector.normalize();
 				vector.multiplyScalar(FOCUS);
 				new TWEEN.Tween( camera.position )
-					.to( { x: vector.x, y: vector.y, z: vector.z }, 2000 )
-					.easing( TWEEN.Easing.Sinusoidal.Out )
-					.start();
+				.to( { x: vector.x, y: vector.y, z: vector.z }, 2000 )
+				.easing( TWEEN.Easing.Sinusoidal.Out )
+				.start();
 			}
 
 			function focusIdClick(idnum) {
@@ -525,10 +524,8 @@
 				});
 			}
 
-			function help()
-			{
-				if(!isHelpOn)
-				{
+			function help(){
+				if(!isHelpOn){
 					isHelpOn = 1;
 					new TWEEN.Tween( camera.position )
 					.to( { x: camera.position.x * 1.7, y: camera.position.y * 1.7, z: camera.position.z * 1.7 }, 1000 )
@@ -549,7 +546,7 @@
 						frame1.className = 'frametext';
 						var str1 = "\
 						[^]  : Search <br/> \
-						[hapax]  : Toggle hapax logomena highlights <br/> \
+						[hapax]  : Toggle hapax legomena highlights <br/> \
 						[lock] : Unlock/Lock camera & mouse (Lock helps scrolling on text using mouse scroll)<br/> \
 						[x] : Closes all open frames <br/> \
 						[reset] : Resets frames, colors and searches<br/><br/>\
@@ -562,14 +559,13 @@
 						<b>Whitman En Masse v1.0 (Updated 04/22/2015)</b><br/><br/>\
 						Application concept & design by Spencer Chalifour, Victor Florence, Vasu Sharma, Chiranjib Sur, Juliet Vishwanathan<br/>\
 						Data analysis & application programming by Vasu Sharma, Chiranjib Sur, Juliet Vishwanathan<br/>\
-						Documentation by Spencer Chalifour, Victor Florence<br/>\
+						Documentation by Spencer Chalifour, Victor Florence, Vasu Sharma<br/>\
 						Special thanks to Alin Dobra, Terry Harpold<br/><br/>\
 						Full text of the 1881–82 edition of Walt Whitman’s Leaves of Grass (the “Osgood edition”) is from <a href='http://www.whitmanarchive.org'>The Walt Whitman \
 						Archive</a>, eds. Ed Folsum and Kenneth M. Price. Whitman’s text is herein redistributed \
 						for noncommercial research purposes under the terms of a Creative Commons license (CC BY-NC-SA 3.0), and may be \
 						further redistributed <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>under the terms of that license</a>.<br/>\
-						<br/> Whitman en masse uses the <a href='http://www.threejs.org'>Three.js</a> API\
-						";
+						<br/> Whitman En Masse uses the <a href='http://www.threejs.org'>Three.js</a> API with TweenJS on <a href='http://www.createjs.com/TweenJS'>ThreeJS</a> for better camera and scenic controls, <a href='http://www.jquery.com'>jQuery 1.11.2</a>, <a href='http://www.github.com/gka/chroma.js/blob/master/doc/api.md'>ChromaJS</a> for CSS color coding";
 						frame1.innerHTML = str1;
 						tempele.appendChild( frame1 );
 
@@ -585,23 +581,19 @@
 						MAINFRAMEobj.push(MAINobj);
 					});
 				}
-				else
-				{
+				else{
 					isHelpOn=0;
 					escapekey();
 				}
 			}
 
-			function hapax()
-			{
-				if(hapaxONOFF==1)
-				{
+			function hapax(){
+				if(hapaxONOFF==1){
 					hapaxONOFF=0;
 					$( "#hapaxtoggle" ).removeClass( "yellow" );
 					$( "#hapaxtoggle" ).addClass( "blue1" );
 				}
-				else
-				{
+				else{
 					hapaxONOFF=1;
 					$( "#hapaxtoggle" ).removeClass( "blue1" );
 					$( "#hapaxtoggle" ).addClass( "yellow" );
@@ -610,8 +602,7 @@
 			}
 			
 			var i=0;
-			while(i<text.poem.length)
-			{
+			while(i<text.poem.length){
 				var span = $('#span'+i);
 			    var fontSize = parseInt(span.css('font-size'));
 			    do {
@@ -621,28 +612,18 @@
 				i++;
 			}
 
-		function keyboardInit() 
-		{
+		function keyboardInit() {
 		    if (document.addEventListener)
-		    {
 		       document.addEventListener("keydown",keydown,false);
-		    }
 		    else if (document.attachEvent)
-		    {
 		       document.attachEvent("onkeydown", keydown);
-		    }
 		    else
-		    {
 		       document.onkeydown= keydown;
-		    }
 		}
 
-		function escapekey()
-		{
-			if(MAINFRAMEobj.length>0)
-			{
-				for(var i=0; i<MAINFRAMEobj.length; i++)
-				{
+		function escapekey(){
+			if(MAINFRAMEobj.length>0){
+				for(var i=0; i<MAINFRAMEobj.length; i++){
 					MAINFRAMEobj[i].position.x=0;
 					MAINFRAMEobj[i].position.y=100000;
 					MAINFRAMEobj[i].position.z=0;
@@ -658,25 +639,19 @@
 			}
 		}
 
-		function keydown(e) 
-		{
+		function keydown(e) {
 			if(e.keyCode==27)
-			{
 				escapekey();
-			}
 		}
 
-		function cameralockcheck()
-		{
-			if(controls.enabled)
-			{
+		function cameralockcheck(){
+			if(controls.enabled){
 				controls.enabled=false;
 				$( "#cameralock" ).removeClass( "blue1" );
 				$( "#cameralock" ).addClass( "yellow" );
 				$( "#cameralock" ).attr("src", 'images/close.png');
 			}
-			else
-			{
+			else{
 				controls.enabled=true;
 				$( "#cameralock" ).removeClass( "yellow" );
 				$( "#cameralock" ).addClass( "blue1" );
